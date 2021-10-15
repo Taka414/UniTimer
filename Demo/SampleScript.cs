@@ -1,36 +1,10 @@
-﻿# UniTimer
-
-UnityのMonobehavior にシンプルなタイマー操作を追加します
-
-Add a simple timer operation to Unity's Monobehavior
-
-## 動作環境
-
-* Unity 2020.3 以降
-
-## 導入方法
-
-Package Manager に以下文字列を入力
-
-> https://github.com/Taka414/UniTimer.git
-
-Git URL からのインストール
-
-https://docs.unity3d.com/ja/2019.4/Manual/upm-ui-giturl.html
-
-## 使用例
-
-```cs
-#pragma warning disable
+﻿#pragma warning disable
 
 using System;
 using UnityEngine;
 
 namespace Takap.Utility.Timers.Demo
 {
-    /// <summary>
-    /// <see cref="UniTimerCore"/> をテストするためのコンポーネントを表します。
-    /// </summary>
     public class SampleScript : MonoBehaviour
     {
         [SerializeField, Range(0.5f, 2f)] float timeScale = 1f;
@@ -157,4 +131,3 @@ namespace Takap.Utility.Timers.Demo
         public static void Log(string msg) => Debug.Log($"[{DateTime.Now:HH:mm:ss.fff}] {msg}");
     }
 }
-```

@@ -1,0 +1,14 @@
+{
+    "name": "Takap.Utility.Timers",
+    "rootNamespace": "Takap.Utility.Timers",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
