@@ -3,7 +3,7 @@
   "displayName": "UniTimer",
   "version": "1.0.0",
   "unity": "2020.3",
-  "description": "Add a simple timer operation to Unity's Monobehavior."
+  "description": "Add a simple timer operation to Unity's Monobehavior.",
   "type": "library",
   "hideInEditor": false,
   "documentationUrl": "https://github.com/Taka414/UniTimer",
