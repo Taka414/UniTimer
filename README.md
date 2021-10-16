@@ -1,4 +1,4 @@
-﻿# UniTimer
+﻿﻿# UniTimer
 
 UnityのMonobehavior にシンプルなタイマー操作を追加します
 
@@ -7,6 +7,83 @@ Add a simple timer operation to Unity's Monobehavior
 ## 動作環境
 
 * Unity 2020.3 以降
+
+
+
+## このライブラリを使用する利点
+
+このライブラリを使うとうれしい点は
+
+
+
+### タイマー処理のがコルーチンに比べて簡単に書ける
+
+コルーチンをタイマー処理で使用した場合以下のように記述できます。
+
+```csharp
+// コルーチンを使ったタイマー処理
+private void Start()
+{
+    Coroutine c = StartCoroutine(nameof(this.printMessage));
+}
+
+// 1秒ごとにログを出力
+private IEnumerator printMessage()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        Debug.Log("Count=" + i);
+        yield return new WaitForSeconds(1.0f);
+    }
+}
+```
+
+これをこのライブラリでは以下のように簡単に書くことができます。IEnumerator と yield という特徴的な
+
+```csharp
+private void Update()
+{
+    // 簡単な処理ならラムダ式を使用してインラインで記述できる
+    IUniTimerHandle h1 = this.StartTimer(1f, h => Debug.Log("Count=" + h.CurrentExecCount));
+    
+    // もちろんメソッドを指定して実行することもできる
+    IUniTimerHandle h2 = this.StartTimer(1f, this.printMessage);
+}
+
+private void printMessage(IUniTimerHandle h) 
+{
+    Debug.Log("Count=" + h.CurrentExecCount);
+}
+```
+
+
+
+### 途中で実行回数や呼ばれる処理を変更するのが容易
+
+例えば1秒ごとに最初3回で開始したタイマーを途中で5回に変更し、タイマー呼び出しされる処理も変更する処理を簡単に記述できます。
+
+```csharp
+private void Update()
+{
+    IUniTimerHandle h = 
+        this.StartTimer(1.2f, this.foo).SetExecCount(3); // 1.2秒間隔で3回実行する
+}
+
+private void foo(IUniTimerHandle h) 
+{
+    Debug.Log("Count(1)=" + h.CurrentExecCount);
+    if(/*何らかの条件*/)
+    {
+        // 1.2秒間隔で5回barを実行するように変更
+        h.SetExecCount(5);
+        h.ChangeElapsedHanlder(this.bar);
+    }
+}
+
+private void bar(IUniTimerHandle h) => Debug.Log("Count(2)=" + h.CurrentExecCount);
+```
+
+
 
 ## 導入方法
 
@@ -20,7 +97,7 @@ https://docs.unity3d.com/ja/2019.4/Manual/upm-ui-giturl.html
 
 ## 使用例
 
-```cs
+```csharp
 #pragma warning disable
 
 using System;

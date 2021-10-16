@@ -85,10 +85,23 @@ namespace Takap.Utility.Timers
         IUniTimerHandle ChangeInterval(float interval);
 
         /// <summary>
-        /// タイマーの実行回数を設定します。
+        /// 新しいタイマーの実行回数を設定します。
         /// </summary>
         /// <param name="count">実行回数</param>
+        /// <remarks>
+        /// 現在10回実行済みの場合、5を指定した場合はタイマーが即座に停止します。
+        /// <</remarks>
         IUniTimerHandle SetExecCount(long count);
+
+        /// <summary>
+        /// タイマー処理を指定回数分延長します。
+        /// </summary>
+        /// <param name="count">追加する回数</param>
+        /// <remarks>
+        /// OnComplete ハンドラ内で回数を追加することもできます。その場合追加回数実行後に再度OnCompleteが発生します。
+        /// <para>回数未設定で開始した場合はこの操作は無視されます。回数を変更したい場合 <see cref="SetExecCount(long)"/> を使用します。</para>
+        /// </remarks>
+        IUniTimerHandle AddExecCount(long count);
 
         /// <summary>
         /// タイムスケールを無視するかどうかのフラグを設定します。タイマー動作中に変更すると経過時間はリセットされます。

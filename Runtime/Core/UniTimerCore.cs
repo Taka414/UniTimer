@@ -113,6 +113,7 @@ namespace Takap.Utility.Timers.Core
             }
 
             this.enabled = true;
+            Debug.Log("start");
 
             return key;
         }
@@ -181,7 +182,12 @@ namespace Takap.Utility.Timers.Core
 
                     if (key.IsCounterCompleted) // 実行回数超過
                     {
-                        this.invalidObjects.Add(key);
+                        key.CallComplete();
+
+                        if (key.IsCounterCompleted)
+                        {
+                            this.invalidObjects.Add(key); // Completeハンドラ内で回数を変更された場合の処理
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -198,18 +204,19 @@ namespace Takap.Utility.Timers.Core
                     UniTimerHandleImpl key = this.invalidObjects[i];
                     map.Remove(key);
 
-                    key.CallComplete();
+                    //key.CallComplete();
 
                     using (key) { }
 
-                    //Debug.Log("deleted");
+                    Debug.Log("deleted");
                 }
                 this.invalidObjects.Clear();
             }
 
             // 登録がなくなったら待機状態に戻る
-            if (this.mapForUpdate.Count + this.mapforLastUpdate.Count == 0)
+            if (this.mapForUpdate.Count == 0 && this.mapforLastUpdate.Count == 0)
             {
+                Debug.Log("stoped.");
                 this.enabled = false;
             }
         }

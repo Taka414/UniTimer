@@ -49,5 +49,33 @@ namespace Takap.Utility.Timers
         {
             return UniTimerCore.Instance.GetTimers(self);
         }
+
+        /// <summary>
+        /// 指定したタイマーの実行を中断します。
+        /// </summary>
+        public static IUniTimerHandle AbortTimer(this MonoBehaviour self, IUniTimerHandle target)
+        {
+            using (target)
+            {
+                //nop
+            }
+            return target;
+        }
+
+        /// <summary>
+        /// このコンポーネントに関連付けられているアクティブなタイマーを全て停止します。
+        /// </summary>
+        public static IUniTimerHandle[] StopAllTimers(this MonoBehaviour self)
+        {
+            var hs = GetTimers(self);
+            foreach (var h in hs)
+            {
+                using (h)
+                {
+                    // nop
+                }
+            }
+            return hs;
+        }
     }
 }

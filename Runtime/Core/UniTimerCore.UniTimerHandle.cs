@@ -151,8 +151,20 @@ namespace Takap.Utility.Timers.Core
             /// </summary>
             public IUniTimerHandle SetExecCount(long count)
             {
-                this.CurrentExecCount = 0;
+                //this.CurrentExecCount = 0;
                 this.ExecCount = count;
+                return this;
+            }
+
+            /// <summary>
+            /// <see cref="IUniTimerHandle.AddExecCount"/> を実装します。
+            /// </summary>
+            public IUniTimerHandle AddExecCount(long count)
+            {
+                if (this.ExecCount != -1) // 回数指定なしの場合無視
+                {
+                    this.ExecCount += count;
+                }
                 return this;
             }
 
