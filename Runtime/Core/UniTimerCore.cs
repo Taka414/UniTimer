@@ -62,9 +62,9 @@ namespace Takap.Utility.Timers.Core
                     UniTimerCore core = FindObjectOfType<UniTimerCore>();
                     if (core == null)
                     {
-                        var go = new GameObject("UniTimer(singleton)")
+                        var go = new GameObject("UniTimer")
                         {
-                            //hideFlags = HideFlags.HideInHierarchy
+                            hideFlags = HideFlags.HideInHierarchy
                         };
                         instance = go.AddComponent<UniTimerCore>();
 
@@ -113,7 +113,7 @@ namespace Takap.Utility.Timers.Core
             }
 
             this.enabled = true;
-            Debug.Log("start");
+            //Debug.Log("start");
 
             return key;
         }
@@ -208,7 +208,7 @@ namespace Takap.Utility.Timers.Core
 
                     using (key) { }
 
-                    Debug.Log("deleted");
+                    //Debug.Log("deleted");
                 }
                 this.invalidObjects.Clear();
             }
@@ -216,7 +216,7 @@ namespace Takap.Utility.Timers.Core
             // 登録がなくなったら待機状態に戻る
             if (this.mapForUpdate.Count == 0 && this.mapforLastUpdate.Count == 0)
             {
-                Debug.Log("stoped.");
+                //Debug.Log("stoped.");
                 this.enabled = false;
             }
         }
