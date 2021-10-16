@@ -1,4 +1,4 @@
-﻿﻿# UniTimer
+﻿﻿﻿# UniTimer
 
 UnityのMonobehavior にシンプルなタイマー操作を追加します
 
@@ -105,9 +105,6 @@ using UnityEngine;
 
 namespace Takap.Utility.Timers.Demo
 {
-    /// <summary>
-    /// <see cref="UniTimerCore"/> をテストするためのコンポーネントを表します。
-    /// </summary>
     public class SampleScript : MonoBehaviour
     {
         [SerializeField, Range(0.5f, 2f)] float timeScale = 1f;
@@ -143,13 +140,13 @@ namespace Takap.Utility.Timers.Demo
 
             // ---------- Case.4 ----------
             // 1秒間隔で実行されるタイマーを登録して各種オプションを設定する
-            IUniTimerHandle h4 = 
+            IUniTimerHandle h4 =
                 this.StartTimer(1f, _ => MyLog.Log("Case.4"))
                     // Time.timeScale を無視するタイマーに変更する
                     .SetIgnoreTimeScale(true)
                     // 5回だけ実行するように実行回数を指定する
                     .SetExecCount(5)
-                    // 10回実行が終わったときにコールバックを呼び出す
+                    // 実行が終わったときにコールバックを呼び出す
                     .OnComplete(_ => MyLog.Log("Case.4 complete."));
 
             // ---------- Case.5 ----------
@@ -184,6 +181,21 @@ namespace Takap.Utility.Timers.Demo
 
             IUniTimerHandle[] timers = this.GetTimers();
             Debug.Log("TimerCount=" + timers.Length);
+
+            // ---------- Case.8 ----------
+            // 終了時に何らかの条件次第でタイマーを延長する
+            int i = 0;
+            IUniTimerHandle h8 =
+                this.StartTimer(1f, _ => MyLog.Log("Case.8"))
+                    .SetExecCount(3)
+                    .OnComplete(h =>
+                    {
+                        if (i++ < 2) // 2回延長したら終了
+                        {
+                            MyLog.Log("Case.8 add count");
+                            h.AddExecCount(2); // 終了時にタイマーを2回追加
+                        }
+                    });
 
             // 
             // 補足:
@@ -225,6 +237,15 @@ namespace Takap.Utility.Timers.Demo
                 {
                     // all delete
                 }
+            }
+        }
+
+        private IEnumerator printMessage()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                Debug.Log("Count=" + i);
+                yield return new WaitForSeconds(1.0f);
             }
         }
     }
