@@ -22,6 +22,9 @@ namespace Takap.Utility.Timers.Core
         // 処理中に見つかった無効なタイマーのオブジェクトを記録しておくためのリスト
         private readonly List<UniTimerHandleImpl> invalidObjects = new List<UniTimerHandleImpl>(128);
 
+        private readonly List<UniTimerHandleImpl> preAddTimerListUpd = new List<UniTimerHandleImpl>(128);
+        private readonly List<UniTimerHandleImpl> preAddTimerListLastUpd = new List<UniTimerHandleImpl>(128);
+
         //
         // Runtime impl
         // - - - - - - - - - - - - - - - - - - - -
@@ -33,11 +36,29 @@ namespace Takap.Utility.Timers.Core
 
         private void LateUpdate()
         {
+            if (this.preAddTimerListLastUpd.Count != 0)
+            {
+                foreach (var h in this.preAddTimerListLastUpd)
+                {
+                    this.mapforLastUpdate[h] = h;
+                }
+                this.preAddTimerListLastUpd.Clear();
+            }
+
             this.updateCore(this.mapforLastUpdate);
         }
 
         private void Update()
         {
+            if (this.preAddTimerListUpd.Count != 0)
+            {
+                foreach (var h in this.preAddTimerListUpd)
+                {
+                    this.mapForUpdate[h] = h;
+                }
+                this.preAddTimerListUpd.Clear();
+            }
+
             this.updateCore(this.mapForUpdate);
         }
 
@@ -98,18 +119,22 @@ namespace Takap.Utility.Timers.Core
         /// </remarks>
         public IUniTimerHandle AddTimer(float interval, MonoBehaviour scope, UniTimerCallback callback, bool useLastUpdate)
         {
-            var key = new UniTimerHandleImpl(interval, scope ?? throw new ArgumentNullException(nameof(scope)));
-            key.UseLastUpdate = useLastUpdate;
+            var key = new UniTimerHandleImpl(interval, scope ?? throw new ArgumentNullException(nameof(scope)))
+            {
+                UseLastUpdate = useLastUpdate
+            };
             key.ChangeElapsedHanlder(callback);
             key.Start();
 
             if (useLastUpdate)
             {
-                this.mapforLastUpdate[key] = key; // LastUpdate用の登録
+                this.preAddTimerListLastUpd.Add(key);
+                //this.mapforLastUpdate[key] = key; // LastUpdate用の登録
             }
             else
             {
-                this.mapForUpdate[key] = key; // Update用の登録
+                this.preAddTimerListUpd.Add(key);
+                //this.mapForUpdate[key] = key; // Update用の登録
             }
 
             this.enabled = true;
