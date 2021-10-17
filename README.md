@@ -1,4 +1,4 @@
-﻿﻿﻿# UniTimer
+﻿﻿﻿﻿# UniTimer
 
 UnityのMonobehavior にシンプルなタイマー操作を追加します
 
@@ -195,6 +195,15 @@ namespace Takap.Utility.Timers.Demo
                             MyLog.Log("Case.8 add count");
                             h.AddExecCount(2); // 終了時にタイマーを2回追加
                         }
+                    });
+
+            // ---------- Case.9 ----------
+            // タイマーハンドラ内で新しいタイマーを起動する(ver 1.1.2修正分)
+            IUniTimerHandle h9 =
+                this.DelayOnce(1f, _ => MyLog.Log("Case.9(1)"))
+                    .OnComplete(h =>
+                    {
+                        this.DelayOnce(1f, _ => MyLog.Log("Case.9(2)"));
                     });
 
             // 
